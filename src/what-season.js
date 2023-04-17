@@ -11,43 +11,44 @@ const {NotImplementedError}=require('../extensions/index.js');
  * getSeason(new Date(2020, 02, 31)) => 'spring'
  * 
  */
-function getSeason(getDate) {
-  const seasons={
-    Jan: 'winter',
-    Feb: 'winter',
-    Dec: 'winter',
+function getSeason(date) {
+  if (date) {
+    if (!(date instanceof Date)||date.toString()==Date.prototype.toString.call(new Date())) {
+      throw new Error("Invalid date!")
+    } else {
+      let month=date.getMonth();
+      let season='';
+      (function () {
+        switch (month) {
+          case 0:
+          case 1:
+          case 11:
+            season='winter';
+            break;
 
-    Mar: 'spring',
-    Apr: 'spring',
-    May: 'spring',
+          case 2:
+          case 3:
+          case 4:
+            season='spring';
+            break;
 
-    Jun: 'summer',
-    Jul: 'summer',
-    Aug: 'summer',
+          case 5:
+          case 6:
+          case 7:
+            season='summer';
+            break;
 
-    Sep: 'autumn',
-    Oct: 'autumn',
-    Nov: 'autumn',
-  }
-  function getSeason(date) {
-    let message='Unable to determine the time of year!'
-    let error=new Error('Invalid date!');
-    if (date===undefined) {
-      return message;
+          case 8:
+          case 9:
+          case 10:
+            season='autumn';
+            break;
+        }
+      }(month));
+      return season;
     }
-    if (isNaN(Date.parse(date))) {
-      throw error;
-    }
-    if (!(date instanceof Date)) {
-      throw error;
-    }
-
-    if (Object.keys(date).length>0) {
-      throw error;
-    }
-    const day=new Date(date);
-    const indicator=day.toDateString().split(' ')[1];
-    return seasons[indicator];
+  } else {
+    return 'Unable to determine the time of year!';
   }
 }
 
